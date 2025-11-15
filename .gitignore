@@ -1,0 +1,48 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+ENV/
+
+# Data files (keep structure, ignore content)
+data/images/
+data/images_temp/
+data/labels/
+data/labels_temp/
+docs/pdfs/*.pdf
+*.jpg
+*.png
+*.jpeg
+
+# Models (except structure)
+models/*.pt
+!models/.gitkeep
+
+# Training outputs
+runs/
+*.pt
+yolo*.pt
+
+# Temporary files
+temp_upload.jpg
+*.tmp
+*.log
+*.csv
+
+# Poppler
+poppler/
+*.zip
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db

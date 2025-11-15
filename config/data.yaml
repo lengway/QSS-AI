@@ -1,0 +1,14 @@
+# YOLOv8 Dataset Configuration
+# 3 classes: signature, stamp, qr
+# Resolution: 400 DPI
+
+path: C:\Users\lengway\Desktop\lengway\innovatex\data
+train: images/train
+val: images/val
+test: images/test
+
+nc: 3
+names:
+  0: signature
+  1: stamp
+  2: qr
