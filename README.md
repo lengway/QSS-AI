@@ -365,7 +365,7 @@ pip install 'ray[default]>=2.8.0'
 
 ## 👥 Авторы
 
-Команда QSS AI
+@lengway
 
 ## 🔗 Полезные ссылки
 
