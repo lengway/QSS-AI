@@ -38,13 +38,13 @@ export default function Home() {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      const selectedFiles = Array.from(e.target.files).slice(0, 50)
+      const selectedFiles = Array.from(e.target.files).slice(0, 100)
       setFiles(selectedFiles)
       setResults([])
     }
   }
 
-  const handleUpload = async () => {
+  const handleUpload = async (exportJson: boolean = false) => {
     if (files.length === 0) return
 
     setLoading(true)
@@ -55,7 +55,8 @@ export default function Home() {
     files.forEach(file => formData.append('files', file))
 
     try {
-      const response = await fetch('http://localhost:8000/api/detect', {
+      const url = `http://localhost:8000/api/detect${exportJson ? '?export_json=true' : ''}`
+      const response = await fetch(url, {
         method: 'POST',
         body: formData,
       })
@@ -64,6 +65,20 @@ export default function Home() {
 
       const data = await response.json()
       console.log('Backend response:', data)
+      
+      // Download JSON if export was requested
+      if (data.export_data && data.export_filename) {
+        const jsonStr = JSON.stringify(data.export_data, null, 2)
+        const blob = new Blob([jsonStr], { type: 'application/json' })
+        const url = URL.createObjectURL(blob)
+        const link = document.createElement('a')
+        link.href = url
+        link.download = data.export_filename
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+        URL.revokeObjectURL(url)
+      }
       
       // Group results by filename (removing " - Page X" suffix)
       const grouped: { [key: string]: Result[] } = {}
@@ -257,7 +272,7 @@ export default function Home() {
           <CardHeader>
             <CardTitle className="text-white">Upload Documents</CardTitle>
             <CardDescription className="text-gray-400">
-              Upload PDF, JPG, or PNG files (max 50 files)
+              Upload PDF, JPG, or PNG files (max 100 files)
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -268,7 +283,7 @@ export default function Home() {
                   <p className="text-sm text-gray-300">
                     <span className="font-semibold">Click to upload</span> or drag and drop
                   </p>
-                  <p className="text-xs text-gray-500">PDF, PNG, JPG (MAX. 50 files)</p>
+                  <p className="text-xs text-gray-500">PDF, PNG, JPG (MAX. 100 files)</p>
                 </div>
                 <input
                   type="file"
@@ -282,13 +297,24 @@ export default function Home() {
               {files.length > 0 && (
                 <div className="space-y-2">
                   <p className="text-sm text-gray-300">{files.length} file(s) selected</p>
-                  <Button
-                    onClick={handleUpload}
-                    disabled={loading}
-                    className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
-                  >
-                    {loading ? 'Processing...' : 'Analyze Documents'}
-                  </Button>
+                  <div className="flex gap-2">
+                    <Button
+                      onClick={() => handleUpload(false)}
+                      disabled={loading}
+                      className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+                    >
+                      {loading ? 'Processing...' : 'Analyze Documents'}
+                    </Button>
+                    <Button
+                      onClick={() => handleUpload(true)}
+                      disabled={loading}
+                      className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700"
+                      title="Analyze and export JSON"
+                    >
+                      <Download className="w-4 h-4 mr-2" />
+                      {loading ? '...' : 'Export JSON'}
+                    </Button>
+                  </div>
                   {loading && <Progress value={progress} className="w-full" />}
                 </div>
               )}

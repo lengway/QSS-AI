@@ -1,8 +1,7 @@
 # YOLOv8 Dataset Configuration
 # 3 classes: signature, stamp, qr
-# Resolution: 400 DPI
-# Use relative path for portability
-path: ./data
+# Dataset: newdataset
+path: C:\Users\lengway\Desktop\lengway\innovatex\data_newdataset
 train: images/train
 val: images/val
 test: images/test

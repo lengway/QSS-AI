@@ -7,42 +7,144 @@ __pycache__/
 .venv/
 venv/
 ENV/
+env/
+*.egg-info/
+dist/
+build/
 
-# Data files (keep structure, ignore content)
-data/images/
-data/images_temp/
-data/labels/
-data/labels_temp/
-docs/pdfs/*.pdf
-*.jpg
-*.png
-*.jpeg
-
-# Models (except structure)
-models/*.pt
-!models/.gitkeep
-
-# Training outputs
-runs/
-*.pt
-yolo*.pt
-
-# Temporary files
-temp_upload.jpg
-*.tmp
+# Node.js
+node_modules/
+.next/
+out/
 *.log
-*.csv
-
-# Poppler
-poppler/
-*.zip
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
 # IDE
 .vscode/
 .idea/
 *.swp
 *.swo
+*.sublime-project
+*.sublime-workspace
 
 # OS
 .DS_Store
 Thumbs.db
+desktop.ini
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+logs/
+app.log
+backend/app.log
+
+# Temporary files
+*.tmp
+*.temp
+temp_upload.jpg
+*.cache
+*.lock
+
+# ============================================
+# БОЛЬШИЕ ФАЙЛЫ - ИСКЛЮЧАЕМ ДЛЯ РАЗМЕРА РЕПО
+# ============================================
+
+# Модели - все .pt файлы (модели очень большие, 10-50MB каждая)
+# Включаем только структуру папок через .gitkeep
+*.pt
+!**/.gitkeep
+
+# Предобученные модели (YOLO скачает автоматически при первом запуске)
+models/*.pt
+!models/.gitkeep
+
+# Все веса моделей из runs/ (best.pt тоже исключаем - слишком большой)
+runs/detect/*/weights/*.pt
+runs/detect/*/weights/*.pth
+
+# Изображения и PDF - исключаем все (очень большие)
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.bmp
+*.webp
+*.pdf
+!**/.gitkeep
+# Разрешаем пример изображения для README (если нужно)
+!docs/example.jpg
+
+# Данные для обучения - исключаем изображения и аннотации
+data/images/**/*.jpg
+data/images/**/*.png
+data/images/**/*.jpeg
+data/labels/**/*.txt
+data/images_temp/
+data/labels_temp/
+
+# Новый датасет - исключаем изображения
+data_newdataset/images/**/*.jpg
+data_newdataset/images/**/*.png
+data_newdataset/images/**/*.jpeg
+data_newdataset/labels/**/*.txt
+data_newdataset/**/*.cache
+
+# Документы - исключаем PDF (очень большие)
+docs/**/*.pdf
+docs/pdfs/
+docs/newdataset/**/*.pdf
+
+# Но разрешаем JSON с аннотациями (маленькие, важные)
+!docs/**/*.json
+
+# Результаты обучения - исключаем графики и изображения
+runs/detect/*/*.png
+runs/detect/*/*.jpg
+runs/detect/*/*.csv
+runs/detect/*/args.yaml
+runs/detect/*/results.png
+runs/detect/*/confusion_matrix.png
+runs/detect/*/labels.jpg
+runs/detect/*/train_batch*.jpg
+runs/detect/*/val_batch*.jpg
+
+# Промежуточные папки обучения
+runs/detect/predict/
+runs/detect/train/
+runs/detect/val/
+
+# Экспорты результатов (большие JSON файлы)
+exports/
+detections_*.json
+all_annotations_*.json
+
+# Но разрешаем важные конфигурационные JSON
+!package.json
+!package-lock.json
+!tsconfig.json
+!components.json
+!**/data.yaml
+!docs/**/*.json
+
+# Poppler (если скачан локально)
+poppler/
+*.zip
+*.tar.gz
+*.rar
+
+# ============================================
+# ЧТО ВКЛЮЧАЕМ В РЕПОЗИТОРИЙ
+# ============================================
+# ✅ Весь код (backend/, frontend/)
+# ✅ Конфигурация (config/, *.yaml, *.json конфиги)
+# ✅ README и документация
+# ✅ requirements.txt, package.json
+# ✅ Структура папок (через .gitkeep)
+# ✅ Скрипты обучения (если есть)
